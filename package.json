@@ -1,0 +1,26 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "A Spotify lyrics translation and real-time synchronization tool built with Node.js",
+  "main": "index.js",
+  "scripts": {
+    "compile": "tsc",
+    "start": "npm run compile && node ./dist/index.js",
+    "dev": "nodemon --watch './src/**/*.ts' --exec 'npm run compile && node ./dist/index.js'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.11.0",
+    "express": "^4.21.1",
+    "graphql": "^16.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.1",
+    "nodemon": "^3.1.7",
+    "typescript": "^5.6.3"
+  },
+  "type": "module"
+}
