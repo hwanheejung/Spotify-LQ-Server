@@ -1,14 +1,14 @@
 ---
-name: 이슈 생성 템플릿
-about: 기능 추가 이슈 생성 템플릿
-title: '[FEATURE/FIX/STYLE/CHORE] 제목'
-labels: ''
-assignees: ''
+name: Issue Template
+about: Template when creating new feature
+title: "[FEATURE/FIX/CHORE] Title"
+labels: ""
+assignees: ""
 ---
 
-### 기능 설명
+### About
 
-### 작업 상세 내용
+### Description
 
 - [ ] todo
 - [ ] todo
