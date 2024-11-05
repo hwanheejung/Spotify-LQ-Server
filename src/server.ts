@@ -1,7 +1,8 @@
-import express from "express";
-import authRouter from "./routers/authRouter.js";
-import dotenv from "dotenv";
 import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import "./db.js";
+import authRouter from "./routers/authRouter.js";
 
 dotenv.config();
 
@@ -19,5 +20,5 @@ app.use(
 app.use("/api/auth", authRouter);
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server ready at: http://localhost:${PORT}`);
+  console.log(`✅ Server ready at: http://localhost:${PORT}`);
 });
