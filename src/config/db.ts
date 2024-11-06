@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-mongoose.connect("mongodb://127.0.0.1:27017/spotify-lt");
+mongoose.connect(process.env.MONGO_URI);
 const db = mongoose.connection;
 
 const handleOpen = () => {
