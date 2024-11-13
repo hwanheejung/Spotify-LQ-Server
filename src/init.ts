@@ -1,10 +1,11 @@
 import "dotenv/config";
 import "./config/db.js";
 import "./models/User.js";
-import app from "./server.js";
+import httpServer from "./server.js";
 
 const PORT = 4000;
 
-app.listen(PORT, () => {
-  console.log(`✅ Server ready at: http://localhost:${PORT}`);
-});
+await new Promise<void>((resolve) =>
+  httpServer.listen({ port: PORT }, resolve)
+);
+console.log(`✅ Server ready at: http://localhost:${PORT}`);
