@@ -47,5 +47,5 @@ export const getUserInfo = async (spotifyAccessToken: string) => {
     headers: { Authorization: `Bearer ${spotifyAccessToken}` },
   });
 
-  return JSON.parse(result.data);
+  return result.data;
 };

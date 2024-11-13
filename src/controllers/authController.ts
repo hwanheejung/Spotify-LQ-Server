@@ -21,14 +21,23 @@ export const handleSpotifyCallback = async (req: Request, res: Response) => {
     } = await exchangeCodeForToken(code);
 
     const userInfo = await getUserInfo(spotifyAccessToken);
-    const { email } = userInfo;
+    const { email, display_name, images, product, country } = userInfo;
 
     const { accessToken, refreshToken } = await saveUserAndTokens(email, {
       accessToken: spotifyAccessToken,
       refreshToken: spotifyRefreshToken,
     });
 
-    res.status(200).json({ email, accessToken, refreshToken });
+    const user = {
+      email,
+      display_name,
+      images,
+      product,
+      country,
+      token: { accessToken, refreshToken },
+    };
+
+    res.status(200).json(user);
   } catch (error) {
     console.error("Error at handleSpotifyCallback:", error);
     res.status(500).json({ error: "Failed to handle Spotify callback" });
