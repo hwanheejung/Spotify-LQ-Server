@@ -1,38 +1,44 @@
 import { ExpressContextFunctionArgument } from "@apollo/server/dist/esm/express4";
+import { GraphQLError } from "graphql";
 import "../../core/config/db.js";
-import User from "../../features/user/models/User.js";
-import { decode } from "../../features/auth/utils/jwtUtil.js";
-import throwError from "../../shared/utils/throwError.js";
-import { ERROR } from "../../shared/constants/error.js";
+import verifyToken from "../../features/auth/helpers/verifyToken.js";
+import { IUser } from "../../features/user/models/User.js";
 
-export interface MyContext {
-  spotifyAccessToken: string;
-}
+export type MyContext = {
+  user?: IUser;
+};
 
 export const context = async ({
   req,
 }: ExpressContextFunctionArgument): Promise<MyContext> => {
-  const userId = await getUserFromReq(req);
-  if (!userId) return { spotifyAccessToken: "" };
-
-  const user = await User.findById(userId);
-  if (!user) return { spotifyAccessToken: "" };
-
-  return { spotifyAccessToken: user.token.spotifyAccessToken };
-};
-
-const getUserFromReq = async (
-  req: ExpressContextFunctionArgument["req"]
-): Promise<string | null> => {
   const token = req.headers.authorization?.replace("Bearer ", "");
-  if (!token) return null;
 
-  const decoded = decode(token);
-
-  if (!decoded) {
-    throwError(ERROR.INVALID_TOKEN);
-    return null;
+  if (!token) {
+    // not logged in
+    return {};
   }
 
-  return decoded.userId;
+  const { tokenStatus, user } = await verifyToken(token);
+
+  if (tokenStatus === "EXPIRED") {
+    throw new GraphQLError("Token expired", {
+      extensions: {
+        code: "UNAUTHORIZED",
+        http: { status: 401 },
+        reason: "TOKEN_EXPIRED",
+      },
+    });
+  }
+
+  if (tokenStatus === "INVALID") {
+    throw new GraphQLError("Invalid token", {
+      extensions: {
+        code: "UNAUTHORIZED",
+        http: { status: 401 },
+        reason: "TOKEN_INVALID",
+      },
+    });
+  }
+
+  return { user };
 };

@@ -1,5 +1,8 @@
 import User, { IUser } from "../../user/models/User.js";
-import { generateAccessToken, generateRefreshToken } from "../utils/jwtUtil.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../helpers/jwtHelpers.js";
 
 export const saveUserAndTokens = async (
   email: string,

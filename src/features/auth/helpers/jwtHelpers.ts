@@ -1,6 +1,6 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import throwError from "../../../shared/utils/throwError";
-import { ERROR } from "../../../shared/constants/error";
+import throwError from "../../../shared/utils/throwError.js";
+import { ERROR } from "../../../shared/constants/error.js";
 
 export const generateAccessToken = (userId: string) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET!, { expiresIn: "1h" });
