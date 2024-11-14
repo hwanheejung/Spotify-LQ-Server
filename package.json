@@ -2,11 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "A Spotify lyrics translation and real-time synchronization tool built with Node.js",
-  "main": "src/init.ts",
+  "main": "src/core/init.ts",
   "scripts": {
     "compile": "tsc",
-    "start": "npm run compile && node ./dist/src/init.js",
-    "dev": "nodemon --watch './src/**/*.ts' --exec 'npm run compile && node ./dist/src/init.js'",
+    "start": "npm run compile && node ./dist/src/core/init.js",
+    "dev": "nodemon --watch './src/**/*.ts' --exec 'npm run compile && node ./dist/src/core/init.js'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

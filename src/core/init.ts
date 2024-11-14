@@ -1,6 +1,6 @@
 import "dotenv/config";
 import "./config/db.js";
-import "./models/User.js";
+import "../features/user/models/User.js";
 import httpServer from "./server.js";
 
 const PORT = 4000;

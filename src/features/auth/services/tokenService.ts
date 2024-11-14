@@ -1,4 +1,4 @@
-import User from "../models/User.js";
+import User from "../../user/models/User.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/jwtUtil.js";
 
 export const saveUserAndTokens = async (

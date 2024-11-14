@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import {
   exchangeCodeForToken,
   getSpotifyAuthUrl,
-  getUserInfo,
+  getSpotifyUserData,
 } from "../services/spotifyService.js";
 import { saveUserAndTokens } from "../services/tokenService.js";
 
@@ -20,7 +20,7 @@ export const handleSpotifyCallback = async (req: Request, res: Response) => {
       refresh_token: spotifyRefreshToken,
     } = await exchangeCodeForToken(code);
 
-    const userInfo = await getUserInfo(spotifyAccessToken);
+    const userInfo = await getSpotifyUserData(spotifyAccessToken);
     const { email, display_name, images, product, country } = userInfo;
 
     const { accessToken, refreshToken } = await saveUserAndTokens(email, {

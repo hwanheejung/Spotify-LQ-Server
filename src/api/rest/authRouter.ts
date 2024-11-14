@@ -1,7 +1,7 @@
 import {
   handleSpotifyCallback,
   requestSpotifyAuthUrl,
-} from "../controllers/authController.js";
+} from "../../features/auth/controllers/authController.js";
 
 import express from "express";
 const authRouter = express.Router();

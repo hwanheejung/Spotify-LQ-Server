@@ -1,34 +1,17 @@
-import cors from "cors";
-import express from "express";
-import authRouter from "./routers/authRouter.js";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import cors from "cors";
+import express from "express";
 import http from "http";
-
-interface MyContext {
-  token?: String;
-}
+import { resolvers, typeDefs } from "../api/graphql/index.js";
+import { MyContext, context } from "../api/graphql/context.js";
+import authRouter from "../api/rest/authRouter.js";
 
 const app = express();
 const httpServer = http.createServer(app);
 
 app.use(express.json());
-
-//
-const typeDefs = `#graphql
-  type Query {
-    hello: String
-  }
-`;
-
-// 리졸버 정의
-const resolvers = {
-  Query: {
-    hello: () => "Hello from Apollo Server!",
-  },
-};
-//
 
 const server = new ApolloServer<MyContext>({
   typeDefs,
@@ -44,11 +27,9 @@ app.use(
     origin: "http://localhost:3000",
     credentials: true,
   }),
+  express.json(),
   expressMiddleware(server, {
-    context: async ({ req }) => {
-      const token = req.headers.authorization || "";
-      return { token };
-    },
+    context,
   })
 );
 

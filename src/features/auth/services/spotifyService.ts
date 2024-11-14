@@ -42,7 +42,7 @@ export const exchangeCodeForToken = async (code: string) => {
   return JSON.parse(response.data);
 };
 
-export const getUserInfo = async (spotifyAccessToken: string) => {
+export const getSpotifyUserData = async (spotifyAccessToken: string) => {
   const result = await axios.get("https://api.spotify.com/v1/me", {
     headers: { Authorization: `Bearer ${spotifyAccessToken}` },
   });
