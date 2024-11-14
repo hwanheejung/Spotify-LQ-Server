@@ -13,9 +13,10 @@ const httpServer = http.createServer(app);
 
 app.use(express.json());
 
-const server = new ApolloServer<MyContext>({
+const server = new ApolloServer({
   typeDefs,
   resolvers,
+  introspection: true,
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
@@ -28,9 +29,7 @@ app.use(
     credentials: true,
   }),
   express.json(),
-  expressMiddleware(server, {
-    context,
-  })
+  expressMiddleware(server, {})
 );
 
 app.use("/api/auth", authRouter);

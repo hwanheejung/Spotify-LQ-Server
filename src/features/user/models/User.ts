@@ -1,6 +1,7 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
 
-interface IUser extends Document {
+export interface IUser extends Document {
+  _id: Types.ObjectId;
   email: string;
   token: {
     spotifyAccessToken: string; // SAT
