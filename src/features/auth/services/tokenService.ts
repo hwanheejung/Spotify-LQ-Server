@@ -46,6 +46,9 @@ const updateUser = async (
 
 const createSession = async (user: IUser): Promise<{ sessionId: string }> => {
   const userId = user._id.toString();
+
+  await Session.deleteMany({ userId });
+
   const sessionId = crypto.randomUUID();
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 

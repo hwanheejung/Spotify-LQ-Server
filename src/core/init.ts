@@ -1,11 +1,11 @@
 import "dotenv/config";
 import "./config/db.js";
 import "../features/user/models/User.js";
-import httpServer from "./server.js";
+import httpsServer from "./server.js";
 
 const PORT = 4000;
 
 await new Promise<void>((resolve) =>
-  httpServer.listen({ port: PORT }, resolve)
+  httpsServer.listen({ port: PORT }, resolve)
 );
-console.log(`✅ Server ready at: http://localhost:${PORT}`);
+console.log(`✅ Server ready at: https://localhost:${PORT}`);
