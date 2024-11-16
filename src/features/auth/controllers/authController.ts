@@ -79,3 +79,19 @@ export const checkAuthStatus = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to check auth status" });
   }
 };
+
+export const logout = async (req: Request, res: Response) => {
+  const sessionId = req.cookies.sessionId;
+  if (sessionId) {
+    await Session.deleteOne({ sessionId });
+    res.clearCookie("sessionId", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+
+    res.status(200).send({ message: "Logout successful" });
+  } else {
+    res.status(200).send({ message: "Logout successful" });
+  }
+};
