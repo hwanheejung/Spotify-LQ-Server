@@ -1,7 +1,7 @@
 import { ExpressContextFunctionArgument } from "@apollo/server/dist/esm/express4";
 import { GraphQLError } from "graphql";
 import "../../core/config/db.js";
-import verifyToken from "../../features/auth/helpers/verifyToken.js";
+import Session from "../../features/user/models/Session.js";
 import { IUser } from "../../features/user/models/User.js";
 
 export type MyContext = {
@@ -11,34 +11,31 @@ export type MyContext = {
 export const context = async ({
   req,
 }: ExpressContextFunctionArgument): Promise<MyContext> => {
-  const token = req.headers.authorization?.replace("Bearer ", "");
+  try {
+    const sessionId = req.cookies.sessionId;
 
-  if (!token) {
-    // not logged in
-    return {};
-  }
+    if (!sessionId) return {};
 
-  const { tokenStatus, user } = await verifyToken(token);
+    const session = await Session.findOne({ sessionId }).populate<{
+      userId: IUser;
+    }>("userId");
+    if (!session || session.expiresAt < new Date()) {
+      throw new GraphQLError("Session expired or invalid", {
+        extensions: {
+          code: "UNAUTHENTICATED",
+        },
+      });
+    }
 
-  if (tokenStatus === "EXPIRED") {
-    throw new GraphQLError("Token expired", {
+    const user = session.userId as IUser;
+
+    return { user };
+  } catch (error) {
+    console.error("Error in context: ", error);
+    throw new GraphQLError("Internal server error", {
       extensions: {
-        code: "UNAUTHORIZED",
-        http: { status: 401 },
-        reason: "TOKEN_EXPIRED",
+        code: "INTERNAL_SERVER_ERROR",
       },
     });
   }
-
-  if (tokenStatus === "INVALID") {
-    throw new GraphQLError("Invalid token", {
-      extensions: {
-        code: "UNAUTHORIZED",
-        http: { status: 401 },
-        reason: "TOKEN_INVALID",
-      },
-    });
-  }
-
-  return { user };
 };

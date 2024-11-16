@@ -1,44 +1,60 @@
+import crypto from "crypto";
+import Session from "../../user/models/Session.js";
 import User, { IUser } from "../../user/models/User.js";
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from "../helpers/jwtHelpers.js";
 
 export const saveUserAndTokens = async (
   email: string,
   spotifyTokens: { accessToken: string; refreshToken: string }
-) => {
+): Promise<{ sessionId: string }> => {
   let user: IUser | null = await User.findOne({ email });
 
   if (!user) {
-    // Create a new user
-    user = new User({
-      email,
-      token: {
-        spotifyAccessToken: spotifyTokens.accessToken,
-        spotifyRefreshToken: spotifyTokens.refreshToken,
-        accessToken: "", // temp
-        refreshToken: "", // temp
-        atExpiry: new Date(), // temp
-      },
-    });
-
-    await user.save();
+    user = await createNewUser(email, spotifyTokens);
+  } else {
+    await updateUser(user, spotifyTokens);
   }
 
-  const userId = user._id.toString();
+  const { sessionId } = await createSession(user);
 
-  const accessToken = generateAccessToken(userId);
-  const refreshToken = generateRefreshToken(userId);
-  const atExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+  return { sessionId };
+};
 
-  user.token.spotifyAccessToken = spotifyTokens.accessToken;
-  user.token.spotifyRefreshToken = spotifyTokens.refreshToken;
-  user.token.accessToken = accessToken;
-  user.token.refreshToken = refreshToken;
-  user.token.atExpiry = atExpiry;
+const createNewUser = async (
+  email: string,
+  spotifyTokens: { accessToken: string; refreshToken: string }
+): Promise<IUser> => {
+  const newUser = new User({
+    email,
+    spotifyToken: {
+      accessToken: spotifyTokens.accessToken,
+      refreshToken: spotifyTokens.refreshToken,
+    },
+  });
+  await newUser.save();
+  return newUser;
+};
+
+const updateUser = async (
+  user: IUser,
+  spotifyTokens: { accessToken: string; refreshToken: string }
+) => {
+  user.spotifyToken.accessToken = spotifyTokens.accessToken;
+  user.spotifyToken.refreshToken = spotifyTokens.refreshToken;
 
   await user.save();
+};
 
-  return { accessToken, refreshToken };
+const createSession = async (user: IUser): Promise<{ sessionId: string }> => {
+  const userId = user._id.toString();
+  const sessionId = crypto.randomUUID();
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+  const session = new Session({
+    sessionId,
+    userId,
+    expiresAt,
+  });
+  await session.save();
+
+  return { sessionId };
 };

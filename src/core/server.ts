@@ -16,7 +16,7 @@ app.use(express.json());
 const server = new ApolloServer<MyContext>({
   typeDefs,
   resolvers,
-  introspection: true,
+  introspection: process.env.NODE_ENV === "development",
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 

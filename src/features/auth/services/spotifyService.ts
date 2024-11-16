@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getSpotifyAuthUrl = (): string => {
+const getSpotifyAuthUrl = (): string => {
   const scope = "user-read-private user-read-email";
   const authUrl = new URL("https://accounts.spotify.com/authorize");
 
@@ -15,7 +15,7 @@ export const getSpotifyAuthUrl = (): string => {
   return authUrl.toString();
 };
 
-export const exchangeCodeForToken = async (code: string) => {
+const exchangeCodeForToken = async (code: string) => {
   const authOptions = new URLSearchParams();
   authOptions.append("code", code);
   authOptions.append("redirect_uri", process.env.SPOTIFY_REDIRECT_URI!);
@@ -42,10 +42,16 @@ export const exchangeCodeForToken = async (code: string) => {
   return JSON.parse(response.data);
 };
 
-export const getSpotifyUserData = async (spotifyAccessToken: string) => {
+const getSpotifyUserData = async (spotifyAccessToken: string) => {
   const result = await axios.get("https://api.spotify.com/v1/me", {
     headers: { Authorization: `Bearer ${spotifyAccessToken}` },
   });
 
   return result.data;
+};
+
+export const spotifyService = {
+  getSpotifyAuthUrl,
+  exchangeCodeForToken,
+  getSpotifyUserData,
 };
