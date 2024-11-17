@@ -13,7 +13,6 @@ export const context = async ({
 }: ExpressContextFunctionArgument): Promise<MyContext> => {
   try {
     const sessionId = req.cookies.sessionId;
-
     if (!sessionId) return {};
 
     const session = await Session.findOne({ sessionId }).populate<{
