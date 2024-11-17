@@ -1,6 +1,7 @@
 import axios from "axios";
 import { IUser } from "../../../models/User.js";
 import { SPOTIFY_BASE } from "../../../lib/constants/spotify.js";
+import { ERROR } from "../../../lib/constants/error.js";
 
 export const getSavedAlbums = async (
   _: unknown,
@@ -8,7 +9,7 @@ export const getSavedAlbums = async (
   { user }: { user: IUser }
 ) => {
   if (!user) {
-    throw new Error("User not found");
+    throw new Error(ERROR.USER_NOT_FOUND);
   }
 
   try {

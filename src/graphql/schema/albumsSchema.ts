@@ -1,5 +1,6 @@
 import { buildSchema } from "graphql";
 import {
+  AlbumType,
   ArtistType,
   ExternalUrlsType,
   ImageType,
@@ -9,31 +10,20 @@ import {
 
 export const albumsSchema = buildSchema(`
   ${TrackType}
+  ${AlbumType}
   ${ArtistType}
   ${ImageType}
   ${RestrictionsType}
   ${ExternalUrlsType}
+
 
   type AlbumItem {
     added_at: String
     album: Album
   }
 
-  type Album {
-    album_type: String
-    total_tracks: Int
-    available_markets: [String]
-    external_urls: ExternalUrls
-    href: String
-    id: String  
-    images: [Image]
-    name: String
-    release_date: String
-    release_date_precision: String
-    restrictions: Restrictions
+  extend type Album {
     type: String
-    uri: String
-    artists: [Artist]
     tracks: Tracks
     copyrights: [Copyright]
     external_ids: ExternalIds
@@ -51,7 +41,6 @@ export const albumsSchema = buildSchema(`
     total: Int
     items: [Track]
   }
-
 
   type LinkedFrom {
     external_urls: ExternalUrls
@@ -72,6 +61,26 @@ export const albumsSchema = buildSchema(`
     upc: String
   }
 
+  type TrackItem {
+    artists: [Artist]
+    available_markets: [String]
+    disc_number: Int
+    duration_ms: Int
+    explicit: Boolean
+    external_urls: ExternalUrls
+    href: String
+    id: String
+    is_playable: Boolean
+    linked_from: LinkedFrom
+    restrictions: Restrictions
+    name: String
+    preview_url: String
+    track_number: Int
+    type: String
+    uri: String
+    is_local: Boolean
+  }
+
   type SavedAlbumsResponse {
     href: String
     limit: Int
@@ -82,7 +91,18 @@ export const albumsSchema = buildSchema(`
     items: [AlbumItem]
   }
 
+  type AlbumTracksResponse {
+    href: String
+    limit: Int
+    next: String
+    offset: Int
+    previous: String
+    total: Int
+    items: [TrackItem]
+  }
+
   type Query {
     getSavedAlbums(offset: Int = 0, limit: Int = 20): SavedAlbumsResponse
+    getAlbumTracks(albumId: String!): AlbumTracksResponse
   }
 `);
