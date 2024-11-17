@@ -1,4 +1,4 @@
-import { spotifyService } from "../../../features/auth/services/spotifyService.js";
+import axios from "axios";
 import { IUser } from "../../../features/user/models/User.js";
 
 export const userResolver = {
@@ -7,11 +7,11 @@ export const userResolver = {
       if (!user) {
         throw new Error("User not found");
       }
-      const data = await spotifyService.getSpotifyUserData(
-        user.spotifyToken.accessToken
-      );
+      const result = await axios.get("https://api.spotify.com/v1/me", {
+        headers: { Authorization: `Bearer ${user.spotifyToken.accessToken}` },
+      });
 
-      return data;
+      return result.data;
     },
   },
 };
