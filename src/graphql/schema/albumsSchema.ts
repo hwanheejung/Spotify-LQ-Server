@@ -104,5 +104,6 @@ export const albumsSchema = buildSchema(`
   type Query {
     getSavedAlbums(offset: Int = 0, limit: Int = 20): SavedAlbumsResponse
     getAlbumTracks(albumId: String!): AlbumTracksResponse
+    getAlbum(albumId: String!): Album
   }
 `);
