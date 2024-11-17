@@ -1,7 +1,8 @@
 import axios from "axios";
-import { IUser } from "../../../features/user/models/User";
+import { IUser } from "../../models/User.js";
+import { SPOTIFY_BASE } from "../../lib/constants/spotify.js";
 
-export const albumResolver = {
+export const albumsResolver = {
   Query: {
     getSavedAlbums: async (
       _: unknown,
@@ -14,7 +15,7 @@ export const albumResolver = {
 
       try {
         const response = await axios.get(
-          `https://api.spotify.com/v1/me/albums?limit=${limit}&offset=${offset}`,
+          `${SPOTIFY_BASE}/v1/me/albums?limit=${limit}&offset=${offset}`,
           {
             headers: {
               Authorization: `Bearer ${user.spotifyToken.accessToken}`,

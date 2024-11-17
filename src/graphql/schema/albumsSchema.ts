@@ -1,6 +1,6 @@
 import { buildSchema } from "graphql";
 
-export const albumGQLSchema = buildSchema(`
+export const albumsGQLSchema = buildSchema(`
   type AlbumItem {
     added_at: String
     album: Album
