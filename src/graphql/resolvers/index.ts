@@ -1,2 +1,2 @@
-export * from "./userResolver.js";
-export * from "./albumsResolver.js";
+export * from "./albums/index.js";
+export * from "./users/index.js";

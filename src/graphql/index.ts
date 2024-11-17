@@ -1,5 +1,5 @@
-import { albumsResolver, userResolver } from "./resolvers/index.js";
-import { albumsGQLSchema, userGQLSchema } from "./schema/index.js";
+import { albumsResolver, usersResolver } from "./resolvers/index.js";
+import { albumsSchema, userSchema } from "./schema/index.js";
 
-export const typeDefs = [userGQLSchema, albumsGQLSchema];
-export const resolvers = [userResolver, albumsResolver];
+export const typeDefs = [userSchema, albumsSchema];
+export const resolvers = [usersResolver, albumsResolver];

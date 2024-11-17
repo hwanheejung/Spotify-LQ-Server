@@ -1,6 +1,19 @@
 import { buildSchema } from "graphql";
+import {
+  ArtistType,
+  ExternalUrlsType,
+  ImageType,
+  RestrictionsType,
+  TrackType,
+} from "./common/index.js";
 
-export const albumsGQLSchema = buildSchema(`
+export const albumsSchema = buildSchema(`
+  ${TrackType}
+  ${ArtistType}
+  ${ImageType}
+  ${RestrictionsType}
+  ${ExternalUrlsType}
+
   type AlbumItem {
     added_at: String
     album: Album
@@ -12,7 +25,7 @@ export const albumsGQLSchema = buildSchema(`
     available_markets: [String]
     external_urls: ExternalUrls
     href: String
-    id: String
+    id: String  
     images: [Image]
     name: String
     release_date: String
@@ -29,29 +42,6 @@ export const albumsGQLSchema = buildSchema(`
     popularity: Int
   }
 
-  type ExternalUrls {
-    spotify: String
-  }
-
-  type Image {
-    url: String
-    height: Int
-    width: Int
-  }
-
-  type Restrictions {
-    reason: String
-  }
-
-  type Artist {
-    external_urls: ExternalUrls
-    href: String
-    id: String
-    name: String
-    type: String
-    uri: String
-  }
-
   type Tracks {
     href: String
     limit: Int
@@ -62,25 +52,6 @@ export const albumsGQLSchema = buildSchema(`
     items: [Track]
   }
 
-  type Track {
-    artists: [Artist]
-    available_markets: [String]
-    disc_number: Int
-    duration_ms: Int
-    explicit: Boolean
-    external_urls: ExternalUrls
-    href: String
-    id: String
-    is_playable: Boolean
-    linked_from: LinkedFrom
-    restrictions: Restrictions
-    name: String
-    preview_url: String
-    track_number: Int
-    type: String
-    uri: String
-    is_local: Boolean
-  }
 
   type LinkedFrom {
     external_urls: ExternalUrls
