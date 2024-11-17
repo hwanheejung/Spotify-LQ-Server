@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { saveUserAndTokens } from "../services/tokenService.js";
 import { spotifyService } from "../services/spotifyService.js";
-import Session from "../../user/models/Session.js";
+import Session from "../models/Session.js";
 
 export const requestSpotifyAuthUrl = (req: Request, res: Response) => {
   const url = spotifyService.getSpotifyAuthUrl();

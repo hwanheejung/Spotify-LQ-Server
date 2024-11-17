@@ -6,9 +6,9 @@ import cors from "cors";
 import express from "express";
 import fs from "fs";
 import https from "https";
-import { MyContext, context } from "../api/graphql/context.js";
-import { resolvers, typeDefs } from "../api/graphql/index.js";
-import authRouter from "../api/rest/authRouter.js";
+import { MyContext, context } from "../graphql/context.js";
+import { resolvers, typeDefs } from "../graphql/index.js";
+import authRouter from "../routers/authRouter.js";
 
 const options = {
   key: fs.readFileSync("./localhost-key.pem"),

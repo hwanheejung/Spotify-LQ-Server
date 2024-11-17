@@ -1,6 +1,6 @@
 import crypto from "crypto";
-import Session from "../../user/models/Session.js";
-import User, { IUser } from "../../user/models/User.js";
+import Session from "../models/Session.js";
+import User, { IUser } from "../models/User.js";
 
 export const saveUserAndTokens = async (
   email: string,

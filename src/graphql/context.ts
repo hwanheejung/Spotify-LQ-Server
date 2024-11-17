@@ -1,8 +1,8 @@
 import { ExpressContextFunctionArgument } from "@apollo/server/dist/esm/express4";
 import { GraphQLError } from "graphql";
-import "../../core/config/db.js";
-import Session from "../../features/user/models/Session.js";
-import { IUser } from "../../features/user/models/User.js";
+import "../core/config/db.js";
+import Session from "../models/Session.js";
+import { IUser } from "../models/User.js";
 
 export type MyContext = {
   user?: IUser;

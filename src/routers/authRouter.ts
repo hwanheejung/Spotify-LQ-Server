@@ -3,7 +3,7 @@ import {
   handleSpotifyCallback,
   logout,
   requestSpotifyAuthUrl,
-} from "../../features/auth/controllers/authController.js";
+} from "../controllers/authController.js";
 
 import express from "express";
 const authRouter = express.Router();

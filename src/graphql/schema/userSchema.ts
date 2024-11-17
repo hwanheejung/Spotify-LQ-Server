@@ -1,6 +1,6 @@
 import { buildSchema } from "graphql";
 
-export const userGQLSchema = buildSchema(`
+export const userSchema = buildSchema(`
   type ExplicitContent {
     filter_enabled: Boolean!
     filter_locked: Boolean!
@@ -37,6 +37,6 @@ export const userGQLSchema = buildSchema(`
   }
 
   type Query {
-    getUserInfo: SpotifyUser!
+    getUserProfile: SpotifyUser!
   }
 `);
