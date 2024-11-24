@@ -21,7 +21,7 @@ export const handleSpotifyCallback = async (req: Request, res: Response) => {
     const userInfo = await spotifyService.getSpotifyUserData(
       spotifyAccessToken
     );
-    const { email, display_name, images, product, country } = userInfo;
+    const { email } = userInfo;
 
     const { sessionId } = await saveUserAndTokens(email, {
       accessToken: spotifyAccessToken,
@@ -44,13 +44,6 @@ export const handleSpotifyCallback = async (req: Request, res: Response) => {
 
     res.status(200).cookie("sessionId", sessionId, cookieOptions).json({
       message: "Login Successful",
-      user: {
-        email,
-        display_name,
-        images,
-        product,
-        country,
-      },
     });
   } catch (error) {
     console.error("Error at handleSpotifyCallback:", error);
