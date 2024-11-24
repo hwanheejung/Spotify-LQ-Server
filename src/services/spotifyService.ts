@@ -2,7 +2,7 @@ import axios from "axios";
 
 const getSpotifyAuthUrl = (): string => {
   const scope =
-    "user-read-private user-read-email user-follow-read user-follow-modify user-top-read user-library-read user-library-modify user-read-playback-state user-modify-playback-state user-read-currently-playing user-read-recently-played playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private";
+    "streaming user-read-private user-read-email user-follow-read user-follow-modify user-top-read user-library-read user-library-modify user-read-playback-state user-modify-playback-state user-read-currently-playing user-read-recently-played playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private";
   const authUrl = new URL("https://accounts.spotify.com/authorize");
 
   const config = {
