@@ -4,6 +4,7 @@ import "../core/config/db.js";
 import Session from "../models/Session.js";
 import { IUser } from "../models/User.js";
 import { spotifyAxios } from "./utils/spotifyAxios.js";
+import { extendSession } from "./utils/extendSession.js";
 
 export type MyContext =
   | {
@@ -20,12 +21,12 @@ export const context = async ({
 }: ExpressContextFunctionArgument): Promise<MyContext> => {
   try {
     const sessionId = req.cookies.sessionId;
-
     if (!sessionId) return { isAuthenticated: false };
 
     const session = await Session.findOne({ sessionId }).populate<{
       userId: IUser;
     }>("userId");
+
     if (!session || session.expiresAt < new Date()) {
       throw new GraphQLError("Session expired or invalid", {
         extensions: {
@@ -35,6 +36,7 @@ export const context = async ({
     }
 
     const user = session.userId as IUser;
+    await extendSession(session);
 
     return { isAuthenticated: true, user, spotifyAxios: spotifyAxios(user) };
   } catch (error) {
