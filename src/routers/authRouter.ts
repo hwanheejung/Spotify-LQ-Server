@@ -1,5 +1,6 @@
 import {
   checkAuthStatus,
+  getSpotifyToken,
   handleSpotifyCallback,
   logout,
   requestSpotifyAuthUrl,
@@ -12,5 +13,6 @@ authRouter.get("/spotify-auth-url", requestSpotifyAuthUrl);
 authRouter.post("/spotify-callback", handleSpotifyCallback);
 authRouter.get("/status", checkAuthStatus);
 authRouter.delete("/logout", logout);
+authRouter.get("/spotify-token", getSpotifyToken);
 
 export default authRouter;

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { saveUserAndTokens } from "../services/tokenService.js";
 import { spotifyService } from "../services/spotifyService.js";
 import Session from "../models/Session.js";
+import { IUser } from "../models/User.js";
 
 export const requestSpotifyAuthUrl = (req: Request, res: Response) => {
   const url = spotifyService.getSpotifyAuthUrl();
@@ -20,7 +21,7 @@ export const handleSpotifyCallback = async (req: Request, res: Response) => {
     const userInfo = await spotifyService.getSpotifyUserData(
       spotifyAccessToken
     );
-    const { email, display_name, images, product, country } = userInfo;
+    const { email } = userInfo;
 
     const { sessionId } = await saveUserAndTokens(email, {
       accessToken: spotifyAccessToken,
@@ -43,13 +44,6 @@ export const handleSpotifyCallback = async (req: Request, res: Response) => {
 
     res.status(200).cookie("sessionId", sessionId, cookieOptions).json({
       message: "Login Successful",
-      user: {
-        email,
-        display_name,
-        images,
-        product,
-        country,
-      },
     });
   } catch (error) {
     console.error("Error at handleSpotifyCallback:", error);
@@ -94,4 +88,26 @@ export const logout = async (req: Request, res: Response) => {
   } else {
     res.status(200).send({ message: "Logout successful" });
   }
+};
+
+export const getSpotifyToken = async (req: Request, res: Response) => {
+  const sessionId = req.cookies.sessionId;
+
+  if (!sessionId) {
+    res.status(200).json({ token: "" });
+    return;
+  }
+
+  const session = await Session.findOne({ sessionId }).populate<{
+    userId: IUser;
+  }>("userId");
+
+  if (!session || session.expiresAt < new Date()) {
+    res.status(200).json({ token: "" });
+    return;
+  }
+
+  const user = session.userId as IUser;
+
+  res.status(200).json({ token: user.spotifyToken.accessToken });
 };
