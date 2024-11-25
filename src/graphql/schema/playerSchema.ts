@@ -13,9 +13,10 @@ export const playerSchema = buildSchema(`
     }
     
     type Query {
-        getAvailableDevices: [Device!]
-            
-        
+        getAvailableDevices: [Device!]!
+    }
+    type Mutation {
+        transferPlayback(deviceId: String!): Boolean!
     }
 
 `);
