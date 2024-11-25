@@ -3,10 +3,17 @@ import { GraphQLError } from "graphql";
 import "../core/config/db.js";
 import Session from "../models/Session.js";
 import { IUser } from "../models/User.js";
+import { spotifyAxios } from "./utils/spotifyAxios.js";
 
-export type MyContext = {
-  user?: IUser;
-};
+export type MyContext =
+  | {
+      isAuthenticated: true;
+      user: IUser;
+      spotifyAxios: ReturnType<typeof spotifyAxios>;
+    }
+  | {
+      isAuthenticated: false;
+    };
 
 export const context = async ({
   req,
@@ -14,7 +21,7 @@ export const context = async ({
   try {
     const sessionId = req.cookies.sessionId;
 
-    if (!sessionId) return {};
+    if (!sessionId) return { isAuthenticated: false };
 
     const session = await Session.findOne({ sessionId }).populate<{
       userId: IUser;
@@ -29,7 +36,7 @@ export const context = async ({
 
     const user = session.userId as IUser;
 
-    return { user };
+    return { isAuthenticated: true, user, spotifyAxios: spotifyAxios(user) };
   } catch (error) {
     console.error("Error in context: ", error);
     throw new GraphQLError("Internal server error", {

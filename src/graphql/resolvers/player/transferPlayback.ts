@@ -1,31 +1,20 @@
-import axios from "axios";
 import { ERROR } from "../../../lib/constants/error.js";
-import { IUser } from "../../../models/User.js";
-import { SPOTIFY_BASE } from "../../../lib/constants/spotify.js";
+import { MyContext } from "../../context.js";
 
 export const transferPlayback = async (
   _: unknown,
   { deviceId }: { deviceId: string },
-  { user }: { user: IUser }
+  context: MyContext
 ) => {
-  if (!user) {
+  if (!context.isAuthenticated) {
     throw new Error(ERROR.USER_NOT_FOUND);
   }
-
+  const { spotifyAxios } = context;
   try {
-    await axios.put(
-      `${SPOTIFY_BASE}/v1/me/player`,
-      {
-        device_ids: [deviceId],
-        play: true,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${user.spotifyToken.accessToken}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    await spotifyAxios.put(`/me/player`, {
+      device_ids: [deviceId],
+      play: true,
+    });
 
     return true;
   } catch (error) {

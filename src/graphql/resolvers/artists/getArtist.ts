@@ -1,25 +1,18 @@
-import axios from "axios";
 import { ERROR } from "../../../lib/constants/error.js";
-import { IUser } from "../../../models/User.js";
-import { SPOTIFY_BASE } from "../../../lib/constants/spotify.js";
+import throwError from "../../../lib/utils/throwError.js";
+import { MyContext } from "../../context.js";
 
 export const getArtist = async (
   _: unknown,
   { artistId }: { artistId: string },
-  { user }: { user: IUser }
+  context: MyContext
 ) => {
-  if (!user) {
+  if (!context.isAuthenticated) {
     throw new Error(ERROR.USER_NOT_FOUND);
   }
-
+  const { spotifyAxios } = context;
   try {
-    const response = await axios.get(`${SPOTIFY_BASE}/v1/artists/${artistId}`, {
-      headers: {
-        Authorization: `Bearer ${user.spotifyToken.accessToken}`,
-      },
-    });
-
-    const data = response.data;
+    const data = await spotifyAxios.get(`/artists/${artistId}`);
 
     return {
       external_urls: data.external_urls || null,
@@ -33,8 +26,7 @@ export const getArtist = async (
       type: data.type || null,
       uri: data.uri || null,
     };
-  } catch (error) {
-    console.error("Error getting artist", error);
-    throw new Error("Failed to fetch artist from Spotify API");
+  } catch (error: any) {
+    throwError(`Error getting artist: ${error.message}`);
   }
 };
