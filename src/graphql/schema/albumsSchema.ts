@@ -4,6 +4,7 @@ import {
   ArtistType,
   ExternalUrlsType,
   ImageType,
+  LinkedFromType,
   RestrictionsType,
   TrackType,
 } from "./common/index.js";
@@ -15,6 +16,7 @@ export const albumsSchema = buildSchema(`
   ${ImageType}
   ${RestrictionsType}
   ${ExternalUrlsType}
+  ${LinkedFromType}
 
 
   type AlbumItem {
@@ -23,7 +25,6 @@ export const albumsSchema = buildSchema(`
   }
 
   extend type Album {
-    type: String
     tracks: Tracks
     copyrights: [Copyright]
     external_ids: ExternalIds
@@ -40,14 +41,6 @@ export const albumsSchema = buildSchema(`
     previous: String
     total: Int
     items: [Track]
-  }
-
-  type LinkedFrom {
-    external_urls: ExternalUrls
-    href: String
-    id: String
-    type: String
-    uri: String
   }
 
   type Copyright {

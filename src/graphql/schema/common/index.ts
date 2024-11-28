@@ -21,3 +21,21 @@ export const ExternalUrlsType = `
     spotify: String
   }
 `;
+
+export const ExternalIdsType = `
+  type ExternalIds {
+    isrc: String
+    ean: String
+    upc: String
+  }
+`;
+
+export const LinkedFromType = `
+  type LinkedFrom {
+    external_urls: ExternalUrls
+    href: String 
+    id: String
+    type: String
+    uri: String
+  }
+`;
