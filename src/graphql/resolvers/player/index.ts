@@ -1,7 +1,8 @@
 import { getAvailableDevices } from "./getAvailableDevices.js";
+import { getQueue } from "./getQueue.js";
 import { transferPlayback } from "./transferPlayback.js";
 
 export const playerResolver = {
-  Query: { getAvailableDevices },
+  Query: { getAvailableDevices, getQueue },
   Mutation: { transferPlayback },
 };
