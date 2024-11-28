@@ -1,28 +1,21 @@
-import axios from "axios";
-import { IUser } from "../../../models/User.js";
-import { SPOTIFY_BASE } from "../../../lib/constants/spotify.js";
 import { ERROR } from "../../../lib/constants/error.js";
+import throwError from "../../../lib/utils/throwError.js";
+import { MyContext } from "../../context.js";
 
 export const getSavedAlbums = async (
   _: unknown,
   { offset = 0, limit = 20 },
-  { user }: { user: IUser }
+  context: MyContext
 ) => {
-  if (!user) {
+  if (!context.isAuthenticated) {
     throw new Error(ERROR.USER_NOT_FOUND);
   }
+  const { spotifyAxios } = context;
 
   try {
-    const response = await axios.get(
-      `${SPOTIFY_BASE}/v1/me/albums?limit=${limit}&offset=${offset}`,
-      {
-        headers: {
-          Authorization: `Bearer ${user.spotifyToken.accessToken}`,
-        },
-      }
+    const data = await spotifyAxios.get(
+      `/me/albums?limit=${limit}&offset=${offset}`
     );
-
-    const data = response.data;
 
     return {
       href: data.href || null,
@@ -97,8 +90,7 @@ export const getSavedAlbums = async (
         },
       })),
     };
-  } catch (error) {
-    console.error("Error fetching albums:", error);
-    throw new Error("Failed to fetch albums from Spotify API");
+  } catch (error: any) {
+    throwError(`Error fetching albums: ${error.message}`);
   }
 };

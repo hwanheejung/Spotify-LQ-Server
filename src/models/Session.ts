@@ -1,8 +1,9 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
+import { IUser } from "./User";
 
-interface ISession extends Document {
+export interface ISession extends Document {
   sessionId: string;
-  userId: Types.ObjectId;
+  userId: Types.ObjectId | IUser;
   expiresAt: Date;
 }
 

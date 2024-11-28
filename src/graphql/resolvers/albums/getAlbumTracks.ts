@@ -1,28 +1,19 @@
-import axios from "axios";
 import { ERROR } from "../../../lib/constants/error.js";
-import { SPOTIFY_BASE } from "../../../lib/constants/spotify.js";
-import { IUser } from "../../../models/User.js";
+import throwError from "../../../lib/utils/throwError.js";
+import { MyContext } from "../../context.js";
 
 export const getAlbumTracks = async (
   _: unknown,
   { albumId }: { albumId: string },
-  { user }: { user: IUser }
+  context: MyContext
 ) => {
-  if (!user) {
+  if (!context.isAuthenticated) {
     throw new Error(ERROR.USER_NOT_FOUND);
   }
 
+  const { spotifyAxios } = context;
   try {
-    const response = await axios.get(
-      `${SPOTIFY_BASE}/v1/albums/${albumId}/tracks`,
-      {
-        headers: {
-          Authorization: `Bearer ${user.spotifyToken.accessToken}`,
-        },
-      }
-    );
-
-    const data = response.data;
+    const data = await spotifyAxios.get(`/albums/${albumId}/tracks`);
 
     return {
       href: data.href || null,
@@ -58,8 +49,7 @@ export const getAlbumTracks = async (
         is_local: track.is_local || null,
       })),
     };
-  } catch (error) {
-    console.error("Error getting album tracks", error);
-    throw new Error("Failed to fetch album tracks from Spotify API");
+  } catch (error: any) {
+    throwError(`Error getting album tracks: ${error.message}`);
   }
 };
