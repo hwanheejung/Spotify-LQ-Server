@@ -57,13 +57,25 @@ export const playerSchema = buildSchema(`
         queue: [Track]
     }
 
+    input OffsetInput {
+        position: Int!
+    }
+
     
     type Query {
         getAvailableDevices: [Device!]!
         getQueue: QueueResponse
     }
+
     type Mutation {
         transferPlayback(deviceId: String!): Boolean!
+        startResumePlayback(
+            deviceId: String!
+            type: String!
+            id: String 
+            ids: [String] 
+            offset: OffsetInput 
+          ): Boolean!
     }
 
 `);

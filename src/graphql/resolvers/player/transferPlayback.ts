@@ -18,7 +18,7 @@ export const transferPlayback = async (
 
     return true;
   } catch (error) {
-    console.error("Error getting available devices", error);
-    throw new Error("Failed to fetch getAvailableDevices from Spotify API");
+    console.error("Error on transferPlayback", error);
+    throw new Error("Failed to fetch transferPlayback from Spotify API");
   }
 };
