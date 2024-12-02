@@ -29,13 +29,15 @@ export const spotifyAxios = (user: IUser) => {
 
         // Refresh token
         const newTokens = await refreshToken(user.spotifyToken.refreshToken);
-        console.log("New tokens: ", newTokens);
+
         // Update user's token
         user.spotifyToken.accessToken = newTokens.accessToken;
         if (newTokens.refreshToken) {
           user.spotifyToken.refreshToken = newTokens.refreshToken;
         }
         await user.save();
+
+        console.log("Token refreshed");
 
         // Retry request with new token
         const retryResponse = await axiosInstance({

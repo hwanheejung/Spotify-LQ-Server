@@ -3,6 +3,7 @@ import { MyContext } from "../../context.js";
 
 type StartResumePlaybackArgs = {
   deviceId: string;
+  positionMs?: number;
 } & (
   | {
       type: "album" | "playlist";
@@ -29,6 +30,7 @@ export const startResumePlayback = async (
   const { spotifyAxios } = context;
   try {
     await spotifyAxios.put(`/me/player/play?device_id=${args.deviceId}`, {
+      position_ms: args.positionMs ?? 0,
       context_uri:
         args.type === "album" || args.type === "playlist"
           ? `spotify:${args.type}:${args.id}`
