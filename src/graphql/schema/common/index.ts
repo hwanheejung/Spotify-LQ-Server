@@ -1,6 +1,7 @@
 export * from "./album.js";
 export * from "./artist.js";
 export * from "./track.js";
+export * from "./lyrics.js";
 
 export const ImageType = `
   type Image {
