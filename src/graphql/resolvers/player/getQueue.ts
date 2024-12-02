@@ -20,16 +20,20 @@ export const getQueue = async (_: unknown, {}, context: MyContext) => {
       duration: Math.floor(currently_playing.duration_ms / 1000),
     };
 
-    const lyricsResponse = await lyricsAxios.get("/get", {
-      params: lyricsParams,
-    });
+    let lyrics;
+    try {
+      const lyricsResponse = await lyricsAxios.get("/get", {
+        params: lyricsParams,
+      });
 
-    const { id, plainLyrics, syncedLyrics } = lyricsResponse.data;
+      if (!lyricsResponse) {
+        lyrics = {
+          available: false,
+        };
+      } else {
+        const { id, plainLyrics, syncedLyrics } = lyricsResponse;
 
-    return {
-      currently_playing: {
-        ...currently_playing,
-        lyrics: {
+        lyrics = {
           available: true,
           locked: false,
           data: {
@@ -37,7 +41,16 @@ export const getQueue = async (_: unknown, {}, context: MyContext) => {
             plainLyrics,
             syncedLyrics,
           },
-        },
+        };
+      }
+    } catch (error: any) {
+      throwError(`Error fetching lyrics: ${error.message}`);
+    }
+
+    return {
+      currently_playing: {
+        ...currently_playing,
+        lyrics,
       },
       queue: data.queue,
     };

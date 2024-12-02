@@ -7,7 +7,7 @@ export const LyricsType = `
 
     type Lyrics {
         available: Boolean!
-        locked: Boolean!
+        locked: Boolean
         data: LyricsData
     }
 `;
