@@ -10,17 +10,6 @@ export const artistTypeDefs = gql`
     genres: [String]
   }
 
-  type Followers {
-    href: String
-    total: Int
-  }
-
-  type Image {
-    url: String!
-    height: Int!
-    width: Int!
-  }
-
   type Query {
     artist(artistId: String!): Artist
   }
