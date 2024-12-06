@@ -3,8 +3,8 @@ import { GraphQLError } from "graphql";
 import "../core/config/db.js";
 import Session from "../models/Session.js";
 import { IUser } from "../models/User.js";
-import { spotifyAxios } from "./utils/spotifyAxios.js";
 import { extendSession } from "./utils/extendSession.js";
+import { spotifyAxios } from "./utils/spotifyAxios.js";
 
 export type MyContext =
   | {
