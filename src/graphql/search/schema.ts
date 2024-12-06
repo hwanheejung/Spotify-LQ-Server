@@ -24,6 +24,7 @@ export const searchTypeDefs = gql`
     id: String
     name: String
     type: String
+    images: [Image]
   }
 
   type TrackResult {

@@ -17,6 +17,7 @@ const mapArtist = (artist: any) => ({
   id: artist.id,
   name: artist.name,
   type: artist.type,
+  images: artist.images,
 });
 
 const mapTrack = (track: any) => ({
@@ -44,14 +45,32 @@ const searchResolvers = {
       const { spotifyAxios } = context;
 
       const searchResult = await spotifyAxios.get(
-        `/search?q=${query}&type=album,artist,track`
+        `/search?q=${query}&type=album,artist,track&limit=4`
       );
+      console.log(searchResult);
 
       return {
         albums: searchResult.albums.items.map(mapAlbum),
         artists: searchResult.artists.items.map(mapArtist),
         tracks: searchResult.tracks.items.map(mapTrack),
       };
+    },
+  },
+  AlbumResultBase: {
+    __resolveType(obj: any) {
+      if (obj.images && obj.id) {
+        return "AlbumResult";
+      }
+      return null;
+    },
+  },
+
+  ArtistResultBase: {
+    __resolveType(obj: any) {
+      if (obj.name && obj.id) {
+        return "ArtistResult";
+      }
+      return null;
     },
   },
 };
