@@ -7,7 +7,7 @@ import express from "express";
 import fs from "fs";
 import https from "https";
 import { MyContext, context } from "../graphql/context.js";
-import { resolvers, typeDefs } from "../graphql/index.js";
+import { schema } from "../graphql/index.js";
 import authRouter from "../routers/authRouter.js";
 
 const options = {
@@ -28,8 +28,7 @@ app.use(
 );
 
 const server = new ApolloServer<MyContext>({
-  typeDefs,
-  resolvers,
+  schema,
   introspection: process.env.NODE_ENV === "development",
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer: httpsServer })],
 });
@@ -37,6 +36,10 @@ const server = new ApolloServer<MyContext>({
 await server.start();
 
 app.use("/api/auth", authRouter);
-app.use("/graphql", express.json(), expressMiddleware(server, { context }));
+app.use(
+  "/graphql",
+  express.json(),
+  expressMiddleware(server, { context }) as unknown as express.RequestHandler
+);
 
 export default httpsServer;
