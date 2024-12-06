@@ -1,2 +1,2 @@
-export { default as artistResolvers } from "./artistResolvers.js";
-export * from "./artistSchema.js";
+export { default as artistResolvers } from "./resolvers.js";
+export * from "./schema.js";
