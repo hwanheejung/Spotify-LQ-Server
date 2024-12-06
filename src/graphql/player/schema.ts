@@ -1,35 +1,35 @@
 import { gql } from "graphql-tag";
 
 export const playerTypeDefs = gql`
-  type Player {
+  type PlayerState {
     currentTrack: CurrentTrack
-    queue: [Track]!
+    queue: [PlayerTrack]!
   }
 
   type CurrentTrack {
     id: String
     name: String
-    album: Album
-    artists: [Artist]
+    album: PlayerAlbum
+    artists: [PlayerArtist]
     duration_ms: Int
     lyrics: Lyrics
   }
 
-  type Album {
+  type PlayerAlbum {
     id: String
     name: String
     images: [Image]
   }
 
-  type Track {
+  type PlayerTrack {
     id: String
     name: String
-    album: Album
-    artists: [Artist!]
+    album: PlayerAlbum
+    artists: [PlayerArtist!]
     duration_ms: Int
   }
 
-  type Artist {
+  type PlayerArtist {
     id: String
     name: String
   }
@@ -57,10 +57,6 @@ export const playerTypeDefs = gql`
     supports_volume: Boolean
   }
 
-  type Image {
-    url: String
-  }
-
   input StartResumePlaybackInput {
     deviceId: String!
     type: String!
@@ -75,7 +71,7 @@ export const playerTypeDefs = gql`
   }
 
   type Query {
-    player: Player
+    player: PlayerState
     availableDevices: [Device]!
   }
 

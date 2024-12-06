@@ -10,14 +10,14 @@ export const albumTypeDefs = gql`
     type: String
     release_date: String
     uri: String
-    artists: [Artist!]
-    tracks: [Track!]!
-    copyrights: [Copyright]
+    artists: [AlbumArtist!]
+    tracks: [AlbumTrack!]!
+    copyrights: [AlbumCopyright]
     label: String
   }
 
-  type Track {
-    artists: [Artist]
+  type AlbumTrack {
+    artists: [AlbumArtist]
     id: String
     name: String
     type: String
@@ -28,7 +28,7 @@ export const albumTypeDefs = gql`
     is_local: Boolean
   }
 
-  type Artist {
+  type AlbumArtist {
     id: String
     name: String
     type: String
@@ -40,13 +40,7 @@ export const albumTypeDefs = gql`
     album: Album
   }
 
-  type Image {
-    url: String!
-    height: Int!
-    width: Int!
-  }
-
-  type Copyright {
+  type AlbumCopyright {
     text: String
     type: String
   }
